@@ -64,7 +64,7 @@ buildscript {
 }
 
 plugins {
-    id "com.diffplug.spotless" version '6.19.0'
+    id "com.diffplug.spotless" version "5.6.1"
     id "org.jetbrains.dokka" version "$dokka_version"
     id "io.github.gradle-nexus.publish-plugin" version "1.0.0"
     id "maven-publish"
@@ -73,7 +73,7 @@ apply plugin: "com.diffplug.spotless"
 spotless {
     format 'misc', {
         target '**/*.gradle', '**/*.md', '**/.gitignore'
-        targetExclude 'docs/**'ㅎ
+        targetExclude 'docs/**'
 
         trimTrailingWhitespace()
         indentWithSpaces()
@@ -168,21 +168,10 @@ task incrementVersion(type: RootGradleBuild) {
 
         def gitBranch = stdOut.toString().replaceAll("\\s","")
         def circleTag = System.getenv("CIRCLE_TAG")
-        def githubToken = System.getenv("GITHUB_TOKEN")
-        def repoSlug = "${System.env.CIRCLE_PROJECT_USERNAME}/${System.env.CIRCLE_PROJECT_REPONAME}"
-        def gitRef = "https://${githubToken}@github.com/${repoSlug}.git"
         def nextVersionPatch = versionPatch.toInteger() + 1
-        def remote = "upstream"
 
         if (!buildDir.exists()) {
             buildDir.mkdir()
-        }
-
-        exec {
-            workingDir "${rootDir}"
-            commandLine "git", "remote", "add", "${remote}", "${gitRef}"
-            // Ignore exit value because remote may have been added in previous task
-            ignoreExitValue true
         }
 
         exec {
@@ -222,7 +211,7 @@ task incrementVersion(type: RootGradleBuild) {
 
             exec {
                 workingDir "${rootDir}"
-                commandLine "git", "push", "${remote}", "${gitBranch}"
+                commandLine "git", "push", "origin", "${gitBranch}"
             }
         }
     }
@@ -262,6 +251,11 @@ task publishDocs {
     doLast {
         exec {
             workingDir "${rootDir}"
+            commandLine "cp", "audioswitch/index.html", "audioswitch/build"
+        }
+
+        exec {
+            workingDir "${rootDir}"
             commandLine "git", "remote", "add", "${remote}", "${gitRef}"
             // Ignore exit value because remote may have been added in previous task
             ignoreExitValue true
@@ -286,6 +280,11 @@ task publishDocs {
         exec {
             workingDir "${rootDir}"
             commandLine "cp", "-r", "audioswitch/build/dokka/html/.", "docs/${releaseVersion}"
+        }
+
+        exec {
+            workingDir "${rootDir}"
+            commandLine "cp", "audioswitch/build/index.html", "docs/${releaseVersion}"
         }
 
         exec {

@@ -64,7 +64,7 @@ internal class AudioDeviceManager(
         } else {
             audioManager.requestAudioFocus(
                 audioFocusChangeListener,
-                AudioManager.STREAM_VOICE_CALL,
+                AudioManager.STREAM_MUSIC,
                 AudioManager.AUDIOFOCUS_GAIN_TRANSIENT,
             )
         }

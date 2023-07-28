@@ -272,7 +272,7 @@ class AudioSwitchTest : BaseTest() {
 
         verify(audioManager).requestAudioFocus(
             defaultAudioFocusChangeListener,
-            AudioManager.STREAM_VOICE_CALL,
+            AudioManager.STREAM_MUSIC,
             AudioManager.AUDIOFOCUS_GAIN_TRANSIENT,
         )
     }

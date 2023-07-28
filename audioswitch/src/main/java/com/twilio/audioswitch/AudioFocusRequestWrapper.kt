@@ -11,8 +11,8 @@ internal class AudioFocusRequestWrapper {
     @SuppressLint("NewApi")
     fun buildRequest(audioFocusChangeListener: OnAudioFocusChangeListener): AudioFocusRequest {
         val playbackAttributes = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
-            .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+            .setUsage(AudioAttributes.USAGE_MEDIA)
+            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
             .build()
         return AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
             .setAudioAttributes(playbackAttributes)
